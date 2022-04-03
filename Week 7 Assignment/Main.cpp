@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <time.h>
+#include <chrono>
 #include <algorithm>
 
 using namespace std;
@@ -22,13 +22,6 @@ void printArray(int *arr) {
 		cout << arr[i] << ", ";
 	}
 	cout << arr[50] << endl;
-}
-
-void copyArray(int* copiedArray, int* originalArray) {
-
-	for (int i = 0; i < 10000; i++) {
-		copiedArray[i] = originalArray[i];
-	}
 }
 
 void swapElements(int *a, int *b) {
@@ -67,11 +60,109 @@ void quickSort(int arr[], int low, int high) {
 
 }
 
+void swap(int *x, int *y)
+{
+	int temp = *x;
+	*x = *y;
+	*y = temp;
+}
+
+void bubbleSort(int arr[], int n)
+{
+	int i, j;
+	bool isSwap;
+
+	for (i = 0; i < n - 1; i++)
+	{
+		isSwap = false;
+		for (j = 0; j < n - i - 1; j++)
+		{
+			if (arr[j] > arr[j + 1])
+			{
+				swap(&arr[j], &arr[j + 1]);
+				isSwap = true;
+			}
+		}
+
+		if (isSwap == false)
+		{
+			break;
+		}
+	}
+}
+
+void merge(int arr[], int const l, int const m, int const r)
+{
+	auto const n1 = m - l + 1;
+	auto const n2 = r - m;
+
+	auto *L = new int[n1], *R = new int[n2];
+
+	for (auto i = 0; i < n1; i++)
+	{
+		L[i] = arr[l + i];
+	}
+	for (auto j = 0; j < n2; j++)
+	{
+		R[j] = arr[m + 1 + j];
+	}
+
+	auto i = 0, j = 0;
+	int k = l;
+
+	while (i < n1 && j < n2) 
+	{
+		if (L[i] <= R[j]) 
+		{
+			arr[k] = L[i];
+			i++;
+		}
+		else 
+		{
+			arr[k] = R[j];
+			j++;
+		}
+		k++;
+	}
+
+	while (i < n1) 
+	{
+		arr[k] = L[i];
+		i++;
+		k++;
+	}
+
+	while (j < n2) 
+	{
+		arr[k] = R[j];
+		j++;
+		k++;
+	}
+
+}
+
+void mergeSort(int array[], int const l, int const r)
+{
+	if (l >= r)
+	{
+		return;
+	}
+
+	auto m = l + (r - l) / 2;
+
+	mergeSort(array, l, m);
+
+	mergeSort(array, m + 1, r);
+
+	merge(array, l, m, r);
+
+}
+
 int main() {
 
 	//Initialize array on heap instead of stack
 	int *array = new int[10000];
-	int *arrayCopy = new int[10000];
+	int *copyArray = new int[10000];
 	bool menu = true;
 	int selection = 0;
 
@@ -99,26 +190,65 @@ int main() {
 		case 2:
 			//Run Insertion Sort
 			break;
-		case 3:
+		case 3: // BUBBLE
+		{
 			//Run Bubble Sort
+
+			for (int i = 0; i < 10000; i++)
+			{
+				copyArray[i] = array[i];
+			}
+			auto start = chrono::high_resolution_clock::now();
+
+			bubbleSort(copyArray, 10000);
+
+			auto stop = chrono::high_resolution_clock::now();
+			auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+			printArray(copyArray);
+
+			cout << "\nThe time to sort was " << duration.count() << " microseconds.\n" << endl;
+
 			break;
-		case 4:
+
+		}
+		case 4: // MERGE
+		{
 			//Run Merge Sort
+
+			for (int i = 0; i < 10000; i++) 
+			{
+				copyArray[i] = array[i];
+			}
+			auto start = chrono::high_resolution_clock::now();
+
+			mergeSort(copyArray, 0, 10000 - 1);
+
+			auto stop = chrono::high_resolution_clock::now();
+			auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+			printArray(copyArray);
+
+			cout << "\nThe time to sort was " << duration.count() << " microseconds.\n" << endl;
+
 			break;
+
+		}
 		case 5:
 		{
 
-			copyArray(arrayCopy, array);
+			for (int i = 0; i < 10000; i++) {
+				copyArray[i] = array[i];
+			}
 
-			const clock_t bc = clock();
-			for (int i = 0; i < 100000000; i++);
+			auto start = chrono::high_resolution_clock::now();
 
-			quickSort(arrayCopy, 0, 10000 - 1);
+			quickSort(copyArray, 0, 10000 - 1);
 
-			cout << float(clock() - bc) / CLOCKS_PER_SEC << " sec" << endl;
+			auto stop = chrono::high_resolution_clock::now();
+			auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
 
-			printArray(arrayCopy);
-			//printArray(array);
+			printArray(copyArray);
+
+			cout << "\nThe time to sort was " << duration.count() << " microseconds.\n" << endl;
 
 			break;
 		}
@@ -136,7 +266,7 @@ int main() {
 	
 
 	delete[] array;
-	delete[] arrayCopy;
+	delete[] copyArray;
 
 	return 0;
 }
