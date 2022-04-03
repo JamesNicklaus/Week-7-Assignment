@@ -4,7 +4,8 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <time.h>
+#include <chrono>
+#include <algorithm>
 
 using namespace std;
 
@@ -17,17 +18,56 @@ void randomizeArray(int *arr) {
 
 void printArray(int *arr) {
 
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 49; i++) {
 		cout << arr[i] << ", ";
 	}
+	cout << arr[50] << endl;
+}
+
+void swapElements(int *a, int *b) {
+
+	int temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+int partition(int arr[], int low, int high) {
+
+	int pivot = arr[high]; 
+	int i = (low - 1); 
+
+	for (int j = low; j <= high - 1; j++) {
+
+		if (arr[j] < pivot) {
+
+			i++; 
+			swapElements(&arr[i], &arr[j]);
+		}
+	}
+	swapElements(&arr[i + 1], &arr[high]);
+	return (i + 1);
+}
+
+void quickSort(int arr[], int low, int high) {
+
+	if (low < high){
+
+		int index = partition(arr, low, high);
+
+		quickSort(arr, low, index - 1);
+		quickSort(arr, index + 1, high);
+	}
+
 }
 
 int main() {
 
 	//Initialize array on heap instead of stack
 	int *array = new int[10000];
+	int *copyArray = new int[10000];
 	bool menu = true;
 	int selection = 0;
+
 
 	randomizeArray(array);
 
@@ -59,8 +99,25 @@ int main() {
 			//Run Merge Sort
 			break;
 		case 5:
-			//Run Quick Sort
+		{
+
+			for (int i = 0; i < 10000; i++) {
+				copyArray[i] = array[i];
+			}
+
+			auto start = chrono::high_resolution_clock::now();
+
+			quickSort(copyArray, 0, 10000 - 1);
+
+			auto stop = chrono::high_resolution_clock::now();
+			auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+
+			printArray(copyArray);
+
+			cout << "\nThe time to sort was " << duration.count() << " microseconds.\n" << endl;
+
 			break;
+		}
 		case 6:
 			//Run Heap Sort
 			break;
@@ -72,11 +129,10 @@ int main() {
 		}
 	}
 
-	//Insert sort functions here. Randomzie the array again in main after sorting.
-
-	//printArray(array);
+	
 
 	delete[] array;
+	delete[] copyArray;
 
 	return 0;
 }
