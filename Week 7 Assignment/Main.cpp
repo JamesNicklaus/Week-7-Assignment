@@ -24,6 +24,7 @@ void printArray(int *arr) {
 	cout << arr[50] << endl;
 }
 
+
 void copyArray(int *copiedArray, int *originalArray) {
 
 	for (int i = 0; i < 10000; i++) {
@@ -91,6 +92,96 @@ void quickSort(int arr[], int low, int high) {
 
 }
 
+void bubbleSort(int arr[], int n)
+{
+	int i, j;
+	bool isSwap;
+
+	for (i = 0; i < n - 1; i++)
+	{
+		isSwap = false;
+		for (j = 0; j < n - i - 1; j++)
+		{
+			if (arr[j] > arr[j + 1])
+			{
+				swapElements(&arr[j], &arr[j + 1]);
+				isSwap = true;
+			}
+		}
+
+		if (isSwap == false)
+		{
+			break;
+		}
+	}
+}
+
+void merge(int arr[], int const l, int const m, int const r)
+{
+	auto const n1 = m - l + 1;
+	auto const n2 = r - m;
+
+	auto *L = new int[n1], *R = new int[n2];
+
+	for (auto i = 0; i < n1; i++)
+	{
+		L[i] = arr[l + i];
+	}
+	for (auto j = 0; j < n2; j++)
+	{
+		R[j] = arr[m + 1 + j];
+	}
+
+	auto i = 0, j = 0;
+	int k = l;
+
+	while (i < n1 && j < n2) 
+	{
+		if (L[i] <= R[j]) 
+		{
+			arr[k] = L[i];
+			i++;
+		}
+		else 
+		{
+			arr[k] = R[j];
+			j++;
+		}
+		k++;
+	}
+
+	while (i < n1) 
+	{
+		arr[k] = L[i];
+		i++;
+		k++;
+	}
+
+	while (j < n2) 
+	{
+		arr[k] = R[j];
+		j++;
+		k++;
+	}
+
+}
+
+void mergeSort(int array[], int const l, int const r)
+{
+	if (l >= r)
+	{
+		return;
+	}
+
+	auto m = l + (r - l) / 2;
+
+	mergeSort(array, l, m);
+
+	mergeSort(array, m + 1, r);
+
+	merge(array, l, m, r);
+}
+
 void heapSort(int arr[], int size) {
 
 	for (int i = size / 2 - 1; i >= 0; i--) {
@@ -103,6 +194,7 @@ void heapSort(int arr[], int size) {
 		swap(arr[0], arr[i]);
 		heapify(arr, i, 0);
 	}
+
 }
 
 int main() {
@@ -137,12 +229,39 @@ int main() {
 		case 2:
 			//Run Insertion Sort
 			break;
-		case 3:
-			//Run Bubble Sort
+		case 3: // BUBBLE
+		{
+
+			copyArray(arrayCopy, array);
+
+			const clock_t bc = clock();
+			for (int i = 0; i < 100000000; i++);
+
+			bubbleSort(arrayCopy, 10000);
+
+			cout << float(clock() - bc) / CLOCKS_PER_SEC << " sec" << endl;
+
+			printArray(arrayCopy);
+
 			break;
-		case 4:
-			//Run Merge Sort
+		}
+		case 4: // MERGE
+		{
+
+			copyArray(arrayCopy, array);
+
+			const clock_t bc = clock();
+			for (int i = 0; i < 100000000; i++);
+
+
+			mergeSort(arrayCopy, 0, 10000 - 1);
+
+			cout << float(clock() - bc) / CLOCKS_PER_SEC << " sec" << endl;
+
+			printArray(arrayCopy);
+
 			break;
+        }
 		case 5: {
 
 			copyArray(arrayCopy, array);
@@ -155,7 +274,6 @@ int main() {
 			cout << float(clock() - bc) / CLOCKS_PER_SEC << " sec" << endl;
 
 			printArray(arrayCopy);
-			//printArray(array);
 
 			break;
 		}
@@ -171,7 +289,6 @@ int main() {
 			cout << float(clock() - bc) / CLOCKS_PER_SEC << " sec" << endl;
 
 			printArray(arrayCopy);
-			//printArray(array);
 
 			break;
 		}
@@ -179,7 +296,7 @@ int main() {
 			menu = false;
 			break;
 		default:
-			cout << "That is not a valid choice, please try again.\n" << endl;
+			cout << "That is not a valid choice, please try again." << endl;
 		}
 	}
 
