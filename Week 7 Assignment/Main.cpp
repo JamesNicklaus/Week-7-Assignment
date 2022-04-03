@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <chrono>
+#include <time.h>
 #include <algorithm>
 
 using namespace std;
@@ -110,17 +110,15 @@ int main() {
 
 			copyArray(arrayCopy, array);
 
-			auto start = chrono::high_resolution_clock::now();
+			const clock_t bc = clock();
+			for (int i = 0; i < 100000000; i++);
 
 			quickSort(arrayCopy, 0, 10000 - 1);
 
-			auto stop = chrono::high_resolution_clock::now();
-			auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+			cout << float(clock() - bc) / CLOCKS_PER_SEC << " sec" << endl;
 
 			printArray(arrayCopy);
 			//printArray(array);
-
-			cout << "\nThe time to sort was " << duration.count() << " microseconds.\n" << endl;
 
 			break;
 		}
