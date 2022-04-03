@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <chrono>
+#include <time.h>
 #include <algorithm>
 
 using namespace std;
@@ -92,9 +92,6 @@ void quickSort(int arr[], int low, int high) {
 
 }
 
-
-
-
 void bubbleSort(int arr[], int n)
 {
 	int i, j;
@@ -107,7 +104,7 @@ void bubbleSort(int arr[], int n)
 		{
 			if (arr[j] > arr[j + 1])
 			{
-				swap(&arr[j], &arr[j + 1]);
+				swapElements(&arr[j], &arr[j + 1]);
 				isSwap = true;
 			}
 		}
@@ -204,7 +201,7 @@ int main() {
 
 	//Initialize array on heap instead of stack
 	int *array = new int[10000];
-	int *copyArray = new int[10000];
+	int *arrayCopy = new int[10000];
 	bool menu = true;
 	int selection = 0;
 
@@ -234,64 +231,49 @@ int main() {
 			break;
 		case 3: // BUBBLE
 		{
-			//Run Bubble Sort
 
-			for (int i = 0; i < 10000; i++)
-			{
-				copyArray[i] = array[i];
-			}
-			auto start = chrono::high_resolution_clock::now();
+			copyArray(arrayCopy, array);
 
-			bubbleSort(copyArray, 10000);
+			const clock_t bc = clock();
+			for (int i = 0; i < 100000000; i++);
 
-			auto stop = chrono::high_resolution_clock::now();
-			auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
-			printArray(copyArray);
+			bubbleSort(arrayCopy, 10000);
 
-			cout << "\nThe time to sort was " << duration.count() << " microseconds.\n" << endl;
+			cout << float(clock() - bc) / CLOCKS_PER_SEC << " sec" << endl;
+
+			printArray(arrayCopy);
 
 			break;
-
 		}
 		case 4: // MERGE
 		{
-			//Run Merge Sort
 
-			for (int i = 0; i < 10000; i++) 
-			{
-				copyArray[i] = array[i];
-			}
-			auto start = chrono::high_resolution_clock::now();
+			copyArray(arrayCopy, array);
 
-			mergeSort(copyArray, 0, 10000 - 1);
+			const clock_t bc = clock();
+			for (int i = 0; i < 100000000; i++);
 
-			auto stop = chrono::high_resolution_clock::now();
-			auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
-			printArray(copyArray);
 
-			cout << "\nThe time to sort was " << duration.count() << " microseconds.\n" << endl;
+			mergeSort(arrayCopy, 0, 10000 - 1);
+
+			cout << float(clock() - bc) / CLOCKS_PER_SEC << " sec" << endl;
+
+			printArray(arrayCopy);
 
 			break;
-    
-
-
-      }
+        }
 		case 5: {
 
-			for (int i = 0; i < 10000; i++) {
-				copyArray[i] = array[i];
-			}
+			copyArray(arrayCopy, array);
 
-			auto start = chrono::high_resolution_clock::now();
+			const clock_t bc = clock();
+			for (int i = 0; i < 100000000; i++);
 
-			quickSort(copyArray, 0, 10000 - 1);
+			quickSort(arrayCopy, 0, 10000 - 1);
 
-			auto stop = chrono::high_resolution_clock::now();
-			auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+			cout << float(clock() - bc) / CLOCKS_PER_SEC << " sec" << endl;
 
-			printArray(copyArray);
-
-			cout << "\nThe time to sort was " << duration.count() << " microseconds.\n" << endl;
+			printArray(arrayCopy);
 
 			break;
 		}
@@ -307,7 +289,6 @@ int main() {
 			cout << float(clock() - bc) / CLOCKS_PER_SEC << " sec" << endl;
 
 			printArray(arrayCopy);
-			//printArray(array);
 
 			break;
 		}
@@ -315,14 +296,14 @@ int main() {
 			menu = false;
 			break;
 		default:
-			cout << "That is not a valid choice, please try again.\n" << endl;
+			cout << "That is not a valid choice, please try again." << endl;
 		}
 	}
 
 	
 
 	delete[] array;
-	delete[] copyArray;
+	delete[] arrayCopy;
 
 	return 0;
 }
