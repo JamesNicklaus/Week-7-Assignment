@@ -24,6 +24,13 @@ void printArray(int *arr) {
 	cout << arr[50] << endl;
 }
 
+void copyArray(int* copiedArray, int* originalArray) {
+
+	for (int i = 0; i < 10000; i++) {
+		copiedArray[i] = originalArray[i];
+	}
+}
+
 void swapElements(int *a, int *b) {
 
 	int temp = *a;
@@ -64,7 +71,7 @@ int main() {
 
 	//Initialize array on heap instead of stack
 	int *array = new int[10000];
-	int *copyArray = new int[10000];
+	int *arrayCopy = new int[10000];
 	bool menu = true;
 	int selection = 0;
 
@@ -101,18 +108,17 @@ int main() {
 		case 5:
 		{
 
-			for (int i = 0; i < 10000; i++) {
-				copyArray[i] = array[i];
-			}
+			copyArray(arrayCopy, array);
 
 			auto start = chrono::high_resolution_clock::now();
 
-			quickSort(copyArray, 0, 10000 - 1);
+			quickSort(arrayCopy, 0, 10000 - 1);
 
 			auto stop = chrono::high_resolution_clock::now();
 			auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
 
-			printArray(copyArray);
+			printArray(arrayCopy);
+			//printArray(array);
 
 			cout << "\nThe time to sort was " << duration.count() << " microseconds.\n" << endl;
 
@@ -132,7 +138,7 @@ int main() {
 	
 
 	delete[] array;
-	delete[] copyArray;
+	delete[] arrayCopy;
 
 	return 0;
 }
