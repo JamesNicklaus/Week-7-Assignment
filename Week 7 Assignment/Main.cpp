@@ -182,6 +182,31 @@ void mergeSort(int array[], int const l, int const r)
 	merge(array, l, m, r);
 }
 
+void selectionSort(int arr[], int size) {
+	int min , outer, inner;
+	for (outer = 0; outer < size - 1; outer++) {
+		min = outer;
+		for (inner = outer + 1; inner < size; inner++) {
+			if (arr[inner] < arr[min]) {
+				min = inner;
+			}
+		}
+		swapElements(&arr[outer], &arr[min]);
+	}
+}
+
+void insertionSort(int arr[], int size) {
+	for (int i = 1; i < size; ++i) {
+		int cElement = i;
+		
+		while (cElement > 0 && arr[cElement] < arr[cElement - 1])
+		{
+			swapElements(&arr[cElement], &arr[cElement - 1]);
+			--cElement;
+		}
+	}
+}
+
 void heapSort(int arr[], int size) {
 
 	for (int i = size / 2 - 1; i >= 0; i--) {
@@ -225,11 +250,37 @@ int main() {
 
 		switch (selection) {
 		case 1:
+		{
 			//Run Selection Sort
+			copyArray(arrayCopy, array);
+
+			const clock_t bc = clock();
+			for (int i = 0; i < 100000000; i++);
+
+			selectionSort(arrayCopy, 10000);
+
+			cout << float(clock() - bc) / CLOCKS_PER_SEC << " sec" << endl;
+
+			printArray(arrayCopy);
+
 			break;
+		}
 		case 2:
+		{
 			//Run Insertion Sort
+			copyArray(arrayCopy, array);
+
+			const clock_t bc = clock();
+			for (int i = 0; i < 100000000; i++);
+
+			insertionSort(arrayCopy, 10000);
+
+			cout << float(clock() - bc) / CLOCKS_PER_SEC << " sec" << endl;
+
+			printArray(arrayCopy);
+
 			break;
+		}
 		case 3: // BUBBLE
 		{
 
