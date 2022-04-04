@@ -211,6 +211,7 @@ int main() {
 	while (menu == true) {
 
 		cout << "\nPlease select a sort from the menu below:" << endl;
+		cout << "=========================================" << endl;
 		cout << "1. Selection Sort" << endl;
 		cout << "2. Insertion Sort" << endl;
 		cout << "3. Bubble Sort" << endl;
@@ -262,7 +263,7 @@ int main() {
 
 			break;
         }
-		case 5: {
+		case 5: { //Quick Sort
 
 			copyArray(arrayCopy, array);
 
@@ -277,7 +278,7 @@ int main() {
 
 			break;
 		}
-		case 6: {
+		case 6: { // Heap Sort
 
 			copyArray(arrayCopy, array);
 
@@ -299,8 +300,6 @@ int main() {
 			cout << "That is not a valid choice, please try again." << endl;
 		}
 	}
-
-	
 
 	delete[] array;
 	delete[] arrayCopy;
