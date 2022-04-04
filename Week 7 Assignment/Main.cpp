@@ -183,6 +183,7 @@ void mergeSort(int array[], int const l, int const r)
 }
 
 void selectionSort(int arr[], int size) {
+
 	int min , outer, inner;
 	for (outer = 0; outer < size - 1; outer++) {
 		min = outer;
@@ -196,6 +197,7 @@ void selectionSort(int arr[], int size) {
 }
 
 void insertionSort(int arr[], int size) {
+
 	for (int i = 1; i < size; ++i) {
 		int cElement = i;
 		
@@ -249,9 +251,9 @@ int main() {
 		cin >> selection;
 
 		switch (selection) {
-		case 1:
+		case 1: //Selection Sort
 		{
-			//Run Selection Sort
+			
 			copyArray(arrayCopy, array);
 
 			const clock_t bc = clock();
@@ -265,9 +267,9 @@ int main() {
 
 			break;
 		}
-		case 2:
+		case 2: //Insertion Sort
 		{
-			//Run Insertion Sort
+			
 			copyArray(arrayCopy, array);
 
 			const clock_t bc = clock();
@@ -281,7 +283,7 @@ int main() {
 
 			break;
 		}
-		case 3: // BUBBLE
+		case 3: // Bubble Sort
 		{
 
 			copyArray(arrayCopy, array);
@@ -297,7 +299,7 @@ int main() {
 
 			break;
 		}
-		case 4: // MERGE
+		case 4: // Merge Sort
 		{
 
 			copyArray(arrayCopy, array);
